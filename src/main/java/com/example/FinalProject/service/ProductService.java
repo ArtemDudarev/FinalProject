@@ -1,4 +1,4 @@
-package com.example.FinalProject.Service;
+package com.example.FinalProject.service;
 
 import com.example.FinalProject.model.Product;
 import com.example.FinalProject.repository.ProductRepository;
@@ -21,7 +21,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void saveProduct(Product product) {
+    public void createProduct(Product product) {
         try {
             productRepository.save(product);
             log.info(String.format("Продукт %s успешно сохранен", product.getProductName()));
@@ -72,7 +72,6 @@ public class ProductService {
     @Transactional
     public void deleteProduct(UUID productId) {
         try {
-            log.info(String.format("Удаление продукта с ID: %s", productId));
             productRepository.deleteById(productId);
             log.info(String.format("Продукт с ID: %s успешно удален", productId));
         } catch (Exception e) {

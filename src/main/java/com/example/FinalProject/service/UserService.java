@@ -1,4 +1,4 @@
-package com.example.FinalProject.Service;
+package com.example.FinalProject.service;
 
 import com.example.FinalProject.model.User;
 import com.example.FinalProject.repository.UserRepository;
@@ -21,7 +21,7 @@ public class UserService {
     }
 
     @Transactional
-    public void saveUser(User user) {
+    public void createUser(User user) {
         try {
             userRepository.save(user);
             log.info(String.format("Пользователь %s успешно сохранен", user.getEmail()));

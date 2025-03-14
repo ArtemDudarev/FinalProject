@@ -1,4 +1,4 @@
-package com.example.FinalProject.Service;
+package com.example.FinalProject.service;
 
 import com.example.FinalProject.model.Category;
 import com.example.FinalProject.repository.CategoryRepository;
@@ -21,7 +21,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void saveCategory(Category category) {
+    public void createCategory(Category category) {
         try {
             categoryRepository.save(category);
             log.info(String.format("Категория %s успешно сохранена", category.getCategoryName()));

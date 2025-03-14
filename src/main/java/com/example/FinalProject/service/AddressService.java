@@ -1,4 +1,4 @@
-package com.example.FinalProject.Service;
+package com.example.FinalProject.service;
 
 import com.example.FinalProject.model.Address;
 import com.example.FinalProject.repository.AddressRepository;
@@ -21,7 +21,7 @@ public class AddressService {
     }
 
     @Transactional
-    public void saveAddress(Address address) {
+    public void createAddress(Address address) {
         try {
             addressRepository.save(address);
             log.info(String.format("Адрес %s успешно сохранен", address));

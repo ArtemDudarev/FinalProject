@@ -1,4 +1,4 @@
-package com.example.FinalProject.Service;
+package com.example.FinalProject.service;
 
 import com.example.FinalProject.model.Role;
 import com.example.FinalProject.repository.RoleRepository;
@@ -24,7 +24,7 @@ public class RoleService {
     }
 
     @Transactional
-    public void saveRole(Role role) {
+    public void createRole(Role role) {
         try {
             roleRepository.save(role);
             log.info(String.format("Роль %s успешно сохранена", role.getRoleName()));

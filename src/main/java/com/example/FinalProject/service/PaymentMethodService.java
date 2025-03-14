@@ -1,4 +1,4 @@
-package com.example.FinalProject.Service;
+package com.example.FinalProject.service;
 
 import com.example.FinalProject.model.PaymentMethod;
 import com.example.FinalProject.repository.PaymentMethodRepository;
@@ -21,7 +21,7 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public void savePaymentMethod(PaymentMethod paymentMethod) {
+    public void createPaymentMethod(PaymentMethod paymentMethod) {
         try {
             paymentMethodRepository.save(paymentMethod);
             log.info(String.format("Способ оплаты %s успешно сохранен", paymentMethod.getMethodName()));

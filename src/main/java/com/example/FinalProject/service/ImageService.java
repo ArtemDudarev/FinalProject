@@ -1,4 +1,4 @@
-package com.example.FinalProject.Service;
+package com.example.FinalProject.service;
 
 import com.example.FinalProject.model.Image;
 import com.example.FinalProject.repository.ImageRepository;
@@ -21,7 +21,7 @@ public class ImageService {
     }
 
     @Transactional
-    public void saveImage(Image image) {
+    public void createImage(Image image) {
         try {
             imageRepository.save(image);
             log.info(String.format("Изображение %s успешно сохранено", image.getImageId()));
