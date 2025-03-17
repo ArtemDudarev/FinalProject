@@ -1,5 +1,7 @@
 package com.example.FinalProject.service;
 
+import com.example.FinalProject.dto.AddressDto;
+import com.example.FinalProject.mapper.AddressMapper;
 import com.example.FinalProject.model.Address;
 import com.example.FinalProject.repository.AddressRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,20 +23,24 @@ public class AddressService {
     }
 
     @Transactional
-    public void createAddress(Address address) {
+    public AddressDto createAddress(AddressDto addressDto) {
         try {
+            Address address = AddressMapper.toEntity(addressDto);
             addressRepository.save(address);
             log.info(String.format("Адрес %s успешно сохранен", address));
+            return addressDto;
         } catch (Exception e) {
-            log.error(String.format("Ошибка при сохранении %s адреса", address), e);
-            throw new RuntimeException(String.format("Ошибка при %s сохранении адреса", address), e);
+            log.error(String.format("Ошибка при сохранении %s адреса", addressDto), e);
+            throw new RuntimeException(String.format("Ошибка при %s сохранении адреса", addressDto), e);
         }
     }
 
     @Transactional
-    public void updateAddress(Address address) {
+    public void updateAddress(UUID addressId, AddressDto addressDto) {
         try {
-            if (addressRepository.existsById(address.getAddressId())) {
+            if (addressRepository.existsById(addressId)) {
+                Address address = AddressMapper.toEntity(addressDto);
+                address.setAddressId(addressId);
                 addressRepository.save(address);
                 log.info(String.format("Адрес %s обновлен", address.getAddressId()));
             } else {
@@ -42,8 +48,8 @@ public class AddressService {
                 throw new EntityNotFoundException("Адрес не найден");
             }
         } catch (Exception e) {
-            log.error(String.format("Ошибка при обновлении %s адреса", address.getAddressId()), e);
-            throw new RuntimeException(String.format("Ошибка при обновлении %s адреса", address.getAddressId()), e);
+            log.error(String.format("Ошибка при обновлении %s адреса", addressId), e);
+            throw new RuntimeException(String.format("Ошибка при обновлении %s адреса", addressId), e);
         }
     }
 
@@ -59,6 +65,17 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
+    public AddressDto findDtoAddressById(UUID addressId) {
+        try {
+            log.info(String.format("Получение Dto адреса по ID: %s", addressId));
+            return AddressMapper.toDto(addressRepository.findById(addressId).orElseThrow(() -> new EntityNotFoundException("Адрес не найден")));
+        } catch (Exception e) {
+            log.error(String.format("Ошибка при получении Dto адреса по ID: %s", addressId), e);
+            throw new RuntimeException(String.format("Ошибка при получении Dto адреса по ID: %s", addressId), e);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public List<Address> findAll() {
         try {
             log.info("Получение всех адресов");
@@ -66,6 +83,18 @@ public class AddressService {
         } catch (Exception e) {
             log.error("Ошибка при получении всех адресов", e);
             throw new RuntimeException("Ошибка при получении всех адресов", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<AddressDto> findAllDto() {
+        try {
+            log.info("Получение всех Dto адресов");
+            List<Address> addresses = addressRepository.findAll();
+            return addresses.stream().map(AddressMapper::toDto).toList();
+        } catch (Exception e) {
+            log.error("Ошибка при получении всех Dto адресов", e);
+            throw new RuntimeException("Ошибка при получении всех Dto адресов", e);
         }
     }
 

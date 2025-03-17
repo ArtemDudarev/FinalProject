@@ -1,6 +1,7 @@
 package com.example.FinalProject.mapper;
 
 import com.example.FinalProject.dto.UserDto;
+import com.example.FinalProject.dto.UserProfileDto;
 import com.example.FinalProject.model.Address;
 import com.example.FinalProject.model.Role;
 import com.example.FinalProject.model.User;
@@ -40,6 +41,16 @@ public class UserMapper {
                       .phoneNumber(user.getPhoneNumber())
                       .roleId(user.getRole().getRoleId())
                       .addressId(user.getAddress() != null ? user.getAddress().getAddressId() : null)
+                      .build();
+    }
+
+    public static UserProfileDto toProfileDto(User user) {
+        return UserProfileDto.builder()
+                      .firstName(user.getFirstName())
+                      .lastName(user.getLastName())
+                      .email(user.getEmail())
+                      .phoneNumber(user.getPhoneNumber())
+                      .addressDto(AddressMapper.toDto(user.getAddress()))
                       .build();
     }
 }

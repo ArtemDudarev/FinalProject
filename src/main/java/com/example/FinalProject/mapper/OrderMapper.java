@@ -30,7 +30,7 @@ public class OrderMapper {
                        .orderStatus(order.getOrderStatus())
                        .totalAmount(order.getTotalAmount())
                        .userId(order.getUser().getUserId())
-                       .paymentMethodId(order.getPaymentMethod().getPaymentMethodId())
+                       .paymentMethodId(order.getPaymentMethod() == null ? null : order.getPaymentMethod().getPaymentMethodId())
                        .build();
     }
 }

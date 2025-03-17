@@ -1,5 +1,7 @@
 package com.example.FinalProject.service;
 
+import com.example.FinalProject.dto.LoyaltyProgramDto;
+import com.example.FinalProject.mapper.LoyaltyProgramMapper;
 import com.example.FinalProject.model.LoyaltyProgram;
 import com.example.FinalProject.repository.LoyaltyProgramRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,20 +23,24 @@ public class LoyaltyProgramService {
     }
 
     @Transactional
-    public void createLoyaltyProgram(LoyaltyProgram loyaltyProgram) {
+    public LoyaltyProgramDto createLoyaltyProgram(LoyaltyProgramDto loyaltyProgramDto) {
         try {
+            LoyaltyProgram loyaltyProgram = LoyaltyProgramMapper.toEntity(loyaltyProgramDto);
             loyaltyProgramRepository.save(loyaltyProgram);
             log.info(String.format("Программа лояльности %s успешно сохранена", loyaltyProgram.getProgramName()));
+            return loyaltyProgramDto;
         } catch (Exception e) {
-            log.error(String.format("Ошибка при сохранении %s программы лояльности", loyaltyProgram.getProgramName()), e);
-            throw new RuntimeException(String.format("Ошибка при сохранении %s программы лояльности", loyaltyProgram.getProgramName()), e);
+            log.error(String.format("Ошибка при сохранении %s программы лояльности", loyaltyProgramDto.getProgramName()), e);
+            throw new RuntimeException(String.format("Ошибка при сохранении %s программы лояльности", loyaltyProgramDto.getProgramName()), e);
         }
     }
 
     @Transactional
-    public void updateLoyaltyProgram(LoyaltyProgram loyaltyProgram) {
+    public void updateLoyaltyProgram(UUID loyaltyProgramId, LoyaltyProgramDto loyaltyProgramDto) {
         try {
-            if (loyaltyProgramRepository.existsById(loyaltyProgram.getLoyaltyProgramId())) {
+            if (loyaltyProgramRepository.existsById(loyaltyProgramId)) {
+                LoyaltyProgram loyaltyProgram = LoyaltyProgramMapper.toEntity(loyaltyProgramDto);
+                loyaltyProgram.setLoyaltyProgramId(loyaltyProgramId);
                 loyaltyProgramRepository.save(loyaltyProgram);
                 log.info(String.format("Программа лояльности %s обновлена", loyaltyProgram.getProgramName()));
             } else {
@@ -42,8 +48,8 @@ public class LoyaltyProgramService {
                 throw new EntityNotFoundException("Программа лояльности не найдена");
             }
         } catch (Exception e) {
-            log.error(String.format("Ошибка при обновлении %s программы лояльности", loyaltyProgram.getProgramName()), e);
-            throw new RuntimeException(String.format("Ошибка при обновлении %s программы лояльности", loyaltyProgram.getProgramName()), e);
+            log.error(String.format("Ошибка при обновлении %s программы лояльности", loyaltyProgramDto.getProgramName()), e);
+            throw new RuntimeException(String.format("Ошибка при обновлении %s программы лояльности", loyaltyProgramDto.getProgramName()), e);
         }
     }
 
@@ -59,6 +65,17 @@ public class LoyaltyProgramService {
     }
 
     @Transactional(readOnly = true)
+    public LoyaltyProgramDto findLoyaltyProgramDtoById(UUID loyaltyProgramId) {
+        try {
+            log.info(String.format("Получение программы лояльности Dto по ID: %s", loyaltyProgramId));
+            return LoyaltyProgramMapper.toDto(loyaltyProgramRepository.findById(loyaltyProgramId).orElseThrow(() -> new EntityNotFoundException("Программа лояльности не найдена")));
+        } catch (Exception e) {
+            log.error(String.format("Ошибка при получении программы лояльности Dto по ID: %s", loyaltyProgramId), e);
+            throw new RuntimeException(String.format("Ошибка при получении программы лояльности Dto по ID: %s", loyaltyProgramId), e);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public List<LoyaltyProgram> findAll() {
         try {
             log.info("Получение всех программ лояльности");
@@ -66,6 +83,18 @@ public class LoyaltyProgramService {
         } catch (Exception e) {
             log.error("Ошибка при получении всех программ лояльности", e);
             throw new RuntimeException("Ошибка при получении всех программ лояльности", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<LoyaltyProgramDto> findAllDto() {
+        try {
+            log.info("Получение всех программ лояльности Dto");
+            List<LoyaltyProgram> loyaltyPrograms = loyaltyProgramRepository.findAll();
+            return loyaltyPrograms.stream().map(LoyaltyProgramMapper::toDto).toList();
+        } catch (Exception e) {
+            log.error("Ошибка при получении всех программ лояльности Dto", e);
+            throw new RuntimeException("Ошибка при получении всех программ лояльности Dto", e);
         }
     }
 

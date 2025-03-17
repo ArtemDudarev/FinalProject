@@ -1,5 +1,7 @@
 package com.example.FinalProject.service;
 
+import com.example.FinalProject.dto.RoleDto;
+import com.example.FinalProject.mapper.RoleMapper;
 import com.example.FinalProject.model.Role;
 import com.example.FinalProject.repository.RoleRepository;
 import com.example.FinalProject.repository.UserRepository;
@@ -24,20 +26,24 @@ public class RoleService {
     }
 
     @Transactional
-    public void createRole(Role role) {
+    public RoleDto createRole(RoleDto roleDto) {
         try {
+            Role role = RoleMapper.toEntity(roleDto);
             roleRepository.save(role);
             log.info(String.format("Роль %s успешно сохранена", role.getRoleName()));
+            return RoleMapper.toDto(role);
         } catch (Exception e) {
-            log.error(String.format("Ошибка при схранении %s роли", role.getRoleName()));
-            throw new RuntimeException(String.format("Ошибка при схранении %s роли", role.getRoleName()), e);
+            log.error(String.format("Ошибка при схранении %s роли", roleDto.getRoleName()));
+            throw new RuntimeException(String.format("Ошибка при схранении %s роли", roleDto.getRoleName()), e);
         }
     }
 
     @Transactional
-    public void updateRole(Role role) {
+    public void updateRole(UUID roleId, RoleDto roleDto) {
         try {
-            if (roleRepository.existsById(role.getRoleId())) {
+            if (roleRepository.existsById(roleId)) {
+                Role role = RoleMapper.toEntity(roleDto);
+                role.setRoleId(roleId);
                 roleRepository.save(role);
                 log.info(String.format("Роль %s обновлена", role.getRoleName()));
             } else {
@@ -45,8 +51,8 @@ public class RoleService {
                 throw new EntityNotFoundException("Роль не найдена");
             }
         } catch (Exception e) {
-            log.error(String.format("Ошибка при обновлении %s роли", role.getRoleName()), e);
-            throw new RuntimeException(String.format("Ошибка при обновлении %s роли", role.getRoleName()), e);
+            log.error(String.format("Ошибка при обновлении %s роли", roleDto.getRoleName()), e);
+            throw new RuntimeException(String.format("Ошибка при обновлении %s роли", roleDto.getRoleName()), e);
         }
     }
 
@@ -57,6 +63,17 @@ public class RoleService {
             return roleRepository.findById(roleId).orElseThrow(() -> new EntityNotFoundException("Роль не найдена"));
         } catch (Exception e) {
             log.error(String.format("Ошибка при получении роли по ID: %s", roleId.toString()), e);
+            throw new RuntimeException(String.format("Ошибка при получении роли по ID: %s", roleId), e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public RoleDto findRoleDtoById(UUID roleId) {
+        try {
+            log.info(String.format("Получение роли по ID: %s", roleId));
+            return RoleMapper.toDto(roleRepository.findById(roleId).orElseThrow(() -> new EntityNotFoundException("Роль не найдена")));
+        } catch (Exception e) {
+            log.error(String.format("Ошибка при получении роли по ID: %s", roleId), e);
             throw new RuntimeException(String.format("Ошибка при получении роли по ID: %s", roleId), e);
         }
     }
@@ -81,6 +98,18 @@ public class RoleService {
         } catch (Exception e) {
             log.error("Ошибка при получении всех ролей", e);
             throw new RuntimeException("Ошибка при получении всех ролей", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<RoleDto> findAllDto() {
+        try {
+            log.info("Получение всех Dto ролей");
+            List<Role> roles = roleRepository.findAll();
+            return roles.stream().map(RoleMapper::toDto).toList();
+        } catch (Exception e) {
+            log.error("Ошибка при получении всех Dto ролей", e);
+            throw new RuntimeException("Ошибка при получении всех Dto ролей", e);
         }
     }
 

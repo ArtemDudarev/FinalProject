@@ -1,5 +1,7 @@
 package com.example.FinalProject.service;
 
+import com.example.FinalProject.dto.CategoryDto;
+import com.example.FinalProject.mapper.CategoryMapper;
 import com.example.FinalProject.model.Category;
 import com.example.FinalProject.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,20 +23,24 @@ public class CategoryService {
     }
 
     @Transactional
-    public void createCategory(Category category) {
+    public CategoryDto createCategory(CategoryDto categoryDto) {
         try {
+            Category category = CategoryMapper.toEntity(categoryDto);
             categoryRepository.save(category);
             log.info(String.format("Категория %s успешно сохранена", category.getCategoryName()));
+            return categoryDto;
         } catch (Exception e) {
-            log.error(String.format("Ошибка при сохранении %s категории", category.getCategoryName()), e);
-            throw new RuntimeException(String.format("Ошибка при сохранении %s категории", category.getCategoryName()), e);
+            log.error(String.format("Ошибка при сохранении %s категории", categoryDto.getCategoryName()), e);
+            throw new RuntimeException(String.format("Ошибка при сохранении %s категории", categoryDto.getCategoryName()), e);
         }
     }
 
     @Transactional
-    public void updateCategory(Category category) {
+    public void updateCategory(UUID categoryId, CategoryDto categoryDto) {
         try {
-            if (categoryRepository.existsById(category.getCategoryId())) {
+            if (categoryRepository.existsById(categoryId)) {
+                Category category = CategoryMapper.toEntity(categoryDto);
+                category.setCategoryId(categoryId);
                 categoryRepository.save(category);
                 log.info(String.format("Категория %s обновлена", category.getCategoryName()));
             } else {
@@ -42,8 +48,8 @@ public class CategoryService {
                 throw new EntityNotFoundException("Категория не найдена");
             }
         } catch (Exception e) {
-            log.error(String.format("Ошибка при обновлении %s категории", category.getCategoryName()), e);
-            throw new RuntimeException(String.format("Ошибка при обновлении %s категории", category.getCategoryName()), e);
+            log.error(String.format("Ошибка при обновлении %s категории", categoryDto.getCategoryName()), e);
+            throw new RuntimeException(String.format("Ошибка при обновлении %s категории", categoryDto.getCategoryName()), e);
         }
     }
 
@@ -59,6 +65,17 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
+    public CategoryDto findDtoCategoryById(UUID categoryId) {
+        try {
+            log.info(String.format("Получение категории по ID: %s", categoryId));
+            return CategoryMapper.toDto(categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Категория не найдена")));
+        } catch (Exception e) {
+            log.error(String.format("Ошибка при получении категории по ID: %s", categoryId), e);
+            throw new RuntimeException(String.format("Ошибка при получении категории по ID: %s", categoryId), e);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public List<Category> findAll() {
         try {
             log.info("Получение всех категорий");
@@ -66,6 +83,18 @@ public class CategoryService {
         } catch (Exception e) {
             log.error("Ошибка при получении всех категорий", e);
             throw new RuntimeException("Ошибка при получении всех категорий", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryDto> findAllDto() {
+        try {
+            log.info("Получение всех Dto категорий");
+            List<Category> categories = categoryRepository.findAll();
+            return categories.stream().map(CategoryMapper::toDto).toList();
+        } catch (Exception e) {
+            log.error("Ошибка при получении всех Dto категорий", e);
+            throw new RuntimeException("Ошибка при получении всех Dto категорий", e);
         }
     }
 

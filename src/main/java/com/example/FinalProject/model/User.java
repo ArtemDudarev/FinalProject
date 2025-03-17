@@ -47,12 +47,12 @@ public class User /*implements UserDetails*/ {
     private Address address;
 
     @NotEmpty(message = "Имя не может быть пустым")
-    @Size(min = 6, max = 60, message = "Имя должно содержать от 6 до 60 символов")
+    @Size(min = 3, max = 60, message = "Имя должно содержать от 6 до 60 символов")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotEmpty(message = "Фамилия не может быть пустой")
-    @Size(min = 6, max = 60, message = "Фамилия должна содержать от 6 до 60 символов")
+    @Size(min = 3, max = 60, message = "Фамилия должна содержать от 6 до 60 символов")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 

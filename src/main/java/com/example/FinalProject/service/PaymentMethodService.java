@@ -1,5 +1,7 @@
 package com.example.FinalProject.service;
 
+import com.example.FinalProject.dto.PaymentMethodDto;
+import com.example.FinalProject.mapper.PaymentMethodMapper;
 import com.example.FinalProject.model.PaymentMethod;
 import com.example.FinalProject.repository.PaymentMethodRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,29 +23,33 @@ public class PaymentMethodService {
     }
 
     @Transactional
-    public void createPaymentMethod(PaymentMethod paymentMethod) {
+    public PaymentMethodDto createPaymentMethod(PaymentMethodDto paymentMethodDto) {
         try {
+            PaymentMethod paymentMethod = PaymentMethodMapper.toEntity(paymentMethodDto);
             paymentMethodRepository.save(paymentMethod);
-            log.info(String.format("Способ оплаты %s успешно сохранен", paymentMethod.getMethodName()));
+            log.info(String.format("Способ оплаты %s успешно сохранен", paymentMethodDto.getMethodName()));
+            return paymentMethodDto;
         } catch (Exception e) {
-            log.error(String.format("Ошибка при сохранении %s способа оплаты", paymentMethod.getMethodName()), e);
-            throw new RuntimeException(String.format("Ошибка при сохранении %s способа оплаты", paymentMethod.getMethodName()), e);
+            log.error(String.format("Ошибка при сохранении %s способа оплаты", paymentMethodDto.getMethodName()), e);
+            throw new RuntimeException(String.format("Ошибка при сохранении %s способа оплаты", paymentMethodDto.getMethodName()), e);
         }
     }
 
     @Transactional
-    public void updatePaymentMethod(PaymentMethod paymentMethod) {
+    public void updatePaymentMethod(UUID paymentMethodId, PaymentMethodDto paymentMethodDto) {
         try {
-            if (paymentMethodRepository.existsById(paymentMethod.getPaymentMethodId())) {
+            if (paymentMethodRepository.existsById(paymentMethodId)) {
+                PaymentMethod paymentMethod = PaymentMethodMapper.toEntity(paymentMethodDto);
+                paymentMethod.setPaymentMethodId(paymentMethodId);
                 paymentMethodRepository.save(paymentMethod);
-                log.info(String.format("Способ оплаты %s обновлен", paymentMethod.getMethodName()));
+                log.info(String.format("Способ оплаты %s обновлен", paymentMethodDto.getMethodName()));
             } else {
                 log.info("Способ оплаты не найден");
                 throw new EntityNotFoundException("Способ оплаты не найден");
             }
         } catch (Exception e) {
-            log.error(String.format("Ошибка при обновлении %s способа оплаты", paymentMethod.getMethodName()), e);
-            throw new RuntimeException(String.format("Ошибка при обновлении %s способа оплаты", paymentMethod.getMethodName()), e);
+            log.error(String.format("Ошибка при обновлении %s способа оплаты", paymentMethodDto.getMethodName()), e);
+            throw new RuntimeException(String.format("Ошибка при обновлении %s способа оплаты", paymentMethodDto.getMethodName()), e);
         }
     }
 
@@ -59,6 +65,17 @@ public class PaymentMethodService {
     }
 
     @Transactional(readOnly = true)
+    public PaymentMethodDto findPaymentMethodDtoById(UUID paymentMethodId) {
+        try {
+            log.info(String.format("Получение Dto способа оплаты по ID: %s", paymentMethodId));
+            return PaymentMethodMapper.toDto(paymentMethodRepository.findById(paymentMethodId).orElseThrow(() -> new EntityNotFoundException("Способ оплаты не найден")));
+        } catch (Exception e) {
+            log.error(String.format("Ошибка при получении Dto способа оплаты по ID: %s", paymentMethodId), e);
+            throw new RuntimeException(String.format("Ошибка при получении Dto способа оплаты по ID: %s", paymentMethodId), e);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public List<PaymentMethod> findAll() {
         try {
             log.info("Получение всех способов оплаты");
@@ -66,6 +83,18 @@ public class PaymentMethodService {
         } catch (Exception e) {
             log.error("Ошибка при получении всех способов оплаты", e);
             throw new RuntimeException("Ошибка при получении всех способов оплаты", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<PaymentMethodDto> findAllDto() {
+        try {
+            log.info("Получение всех Dto способов оплаты");
+            List<PaymentMethod> paymentMethods = paymentMethodRepository.findAll();
+            return paymentMethods.stream().map(PaymentMethodMapper::toDto).toList();
+        } catch (Exception e) {
+            log.error("Ошибка при получении всех Dto способов оплаты", e);
+            throw new RuntimeException("Ошибка при получении всех Dto способов оплаты", e);
         }
     }
 

@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -47,7 +48,7 @@ public class Order {
 
     @NotNull(message = "Дата заказа не может быть пустой")
     @Column(name = "order_date", nullable = false)
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
     @NotEmpty(message = "Статус заказа не может быть пустым")
     @Column(name = "order_status", nullable = false)
