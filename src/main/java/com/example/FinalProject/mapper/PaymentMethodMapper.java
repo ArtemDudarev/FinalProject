@@ -13,7 +13,8 @@ public class PaymentMethodMapper {
 
     public static PaymentMethodDto toDto(PaymentMethod paymentMethod) {
         return PaymentMethodDto.builder()
-                               .methodName(paymentMethod.getMethodName())
-                               .build();
+            .paymentMethodId(paymentMethod.getPaymentMethodId())
+            .methodName(paymentMethod.getMethodName())
+            .build();
     }
 }

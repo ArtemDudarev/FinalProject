@@ -6,6 +6,7 @@ import com.example.FinalProject.dto.PaymentMethodDto;
 import com.example.FinalProject.service.OrderService;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/orders")
+@AllArgsConstructor
 public class OrderController {
 
-    private OrderService orderService;
-
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    private final OrderService orderService;
 
     @PostMapping("/create")
     public ResponseEntity<OrderDto> createOrder(@RequestParam UUID userId) {

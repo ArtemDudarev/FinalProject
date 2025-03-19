@@ -4,6 +4,7 @@ import com.example.FinalProject.dto.AddressDto;
 import com.example.FinalProject.service.AddressService;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/addresses")
+@AllArgsConstructor
 public class AddressController {
 
     private final AddressService addressService;
-
-    public AddressController(AddressService addressService) {
-        this.addressService = addressService;
-    }
 
     @PostMapping("/create")
     public ResponseEntity<AddressDto> createAddress(@RequestBody AddressDto addressDto) {

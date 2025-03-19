@@ -1,10 +1,10 @@
 package com.example.FinalProject.controller;
 
 import com.example.FinalProject.dto.RoleDto;
-import com.example.FinalProject.model.Role;
 import com.example.FinalProject.service.RoleService;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/roles")
+@AllArgsConstructor
 public class RoleController {
 
-    private RoleService roleService;
-
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
-    }
+    private final RoleService roleService;
 
     @PostMapping("/create")
     public ResponseEntity<RoleDto> createRole(@RequestBody RoleDto roleDto){

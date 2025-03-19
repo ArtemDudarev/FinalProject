@@ -34,11 +34,11 @@ public class UserLoyaltyProgram {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userLoyaltyProgramId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "loyalty_program_id", nullable = false)
     private LoyaltyProgram loyaltyProgram;
 }

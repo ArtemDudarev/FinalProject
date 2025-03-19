@@ -70,6 +70,8 @@ public class User /*implements UserDetails*/ {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+
+
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return Collections.singletonList(new SimpleGrantedAuthority(role.getRoleName()));

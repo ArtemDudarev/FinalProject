@@ -5,6 +5,7 @@ import com.example.FinalProject.dto.UserProfileDto;
 import com.example.FinalProject.service.UserService;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/profile")
+@AllArgsConstructor
 public class UserProfileController {
 
     private final UserService userService;
-
-    public UserProfileController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping("/create")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {

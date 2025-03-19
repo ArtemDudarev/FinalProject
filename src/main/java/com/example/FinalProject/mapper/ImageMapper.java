@@ -8,19 +8,25 @@ import jakarta.persistence.EntityNotFoundException;
 
 public class ImageMapper {
 
-    public static Image toEntity(ImageDto productImageDTO, ProductRepository productRepository) {
-        Product product = productRepository.findById(productImageDTO.getProductId()).orElseThrow(() -> new EntityNotFoundException("Продукт не найден"));
+    public static Image toEntity(ImageDto imageDTO, ProductRepository productRepository) {
+
+        Product product = null;
+
+        if(imageDTO.getProductId() != null){
+            product = productRepository
+                .findById(imageDTO.getProductId()).orElseThrow(() -> new EntityNotFoundException("Продукт не найден"));
+        }
 
         return Image.builder()
-                           .imageUrl(productImageDTO.getImageUrl())
+                           .imageUrl(imageDTO.getImageUrl())
                            .product(product)
                            .build();
     }
 
-    public static ImageDto toDto(Image productImage) {
+    public static ImageDto toDto(Image image) {
         return ImageDto.builder()
-                              .imageUrl(productImage.getImageUrl())
-                              .productId(productImage.getProduct().getProductId())
+                              .imageUrl(image.getImageUrl())
+                              .productId(image.getProduct().getProductId())
                               .build();
     }
 }

@@ -35,7 +35,7 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID imageId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 

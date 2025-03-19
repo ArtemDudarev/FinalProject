@@ -1,4 +1,4 @@
-package com.example.FinalProject.model;
+package com.example.FinalProject.model.util;
 
 import lombok.Getter;
 
