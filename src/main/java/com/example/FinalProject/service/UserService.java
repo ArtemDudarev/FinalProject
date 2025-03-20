@@ -5,8 +5,9 @@ import com.example.FinalProject.dto.UserProfileDto;
 import com.example.FinalProject.model.User;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     UserDto createUser(UserDto userDto);
 

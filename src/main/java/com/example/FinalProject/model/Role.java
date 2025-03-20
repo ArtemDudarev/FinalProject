@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.security.core.GrantedAuthority;
 
 @Data
 @Builder
@@ -24,7 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "roles")
 @Cacheable(true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @Column(name = "role_id")
@@ -34,4 +35,9 @@ public class Role {
     @NotEmpty(message = "Название роли не может быть пустым")
     @Column(name = "role_name", unique = true, nullable = false)
     private String roleName;
+
+    @Override
+    public String getAuthority() {
+        return roleName;
+    }
 }

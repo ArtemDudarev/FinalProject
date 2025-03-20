@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +51,8 @@ public class UserServiceImp implements UserService {
     public UserDto createUser(UserDto userDto) {
         try {
             userDto.setRoleId(roleRepository.findByRoleName("ROLE_USER").get().getRoleId());
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
             User user = UserMapper.toEntity(userDto, roleRepository, addressRepository);
             userRepository.save(user);
             log.info(String.format("Пользователь %s успешно сохранен", userDto.getEmail()));
@@ -210,5 +216,11 @@ public class UserServiceImp implements UserService {
             log.error(String.format("Ошибка при удалении пользователя с ID: %s", userId), e);
             throw new RuntimeException(String.format("Ошибка при удалении пользователя с ID: %s", userId), e);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username)
+                             .orElseThrow(() -> new UsernameNotFoundException("Пользователь с именем " + username + " не найден"));
     }
 }
