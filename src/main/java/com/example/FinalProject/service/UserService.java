@@ -6,6 +6,10 @@ import com.example.FinalProject.model.User;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 public interface UserService extends UserDetailsService {
 
@@ -34,4 +38,6 @@ public interface UserService extends UserDetailsService {
     List<UserDto> findAllDto();
 
     void deleteUser(UUID userId);
+
+    OidcUserService oauth2UserService();
 }

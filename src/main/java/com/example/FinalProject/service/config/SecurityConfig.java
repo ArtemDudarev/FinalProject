@@ -68,7 +68,8 @@ public class SecurityConfig {
                     "/api/profile/create",
                     "/api/profile/update/{id}",
                     "/api/profile/getProfile/{id}",
-                    "/api/profile/delete/{id}").hasAnyRole("USER", "WORKER")
+                    "/api/profile/delete/{id}",
+                    "/api/profile/get-user-id-by-email/{email}").hasAnyRole("USER", "WORKER")
                 .requestMatchers("/api/orders/**",
                     "/api/products/update/{id}",
                     "/api/roles/{id}").hasRole("WORKER")
@@ -83,8 +84,12 @@ public class SecurityConfig {
                     "/api/roles/**",
                     "/api/profile/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
+            .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo
+                    .oidcUserService(userService.oauth2UserService())))
             .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
+        System.out.println("OAuth2 login configured");
         return httpSecurity.build();
     }
 }
