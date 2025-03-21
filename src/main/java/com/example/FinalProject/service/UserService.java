@@ -27,6 +27,8 @@ public interface UserService extends UserDetailsService {
 
     UserProfileDto findUseProfileDtoById(UUID userId);
 
+    UUID findUserIdByUserEmail(String email);
+
     List<User> findAll();
 
     List<UserDto> findAllDto();

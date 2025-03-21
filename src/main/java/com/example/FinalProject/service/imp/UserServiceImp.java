@@ -185,6 +185,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Transactional(readOnly = true)
+    public UUID findUserIdByUserEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Пользователь не найден")).getUserId();
+    }
+
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         try {
             log.info("Получение всех пользователей");
