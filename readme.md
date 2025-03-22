@@ -31,37 +31,36 @@
 
 ### Доступные всем
 
-**GET** /api/products — *Позволяет незарегестрированным пользователям пользователям просмотреть продаваемый товар*
+**GET** /api/products — *Позволяет незарегестрированным пользователям просмотреть продаваемый товар*
 
 ### Доступные зарегистрированным пользователям
 
-**GET** /api/products
-/api/addresses/**
-/api/categories
-/api/categories/{id}
-/api/images
-/api/images/{id}
-/api/images/by-product/{productId}
-/api/loyalty-programs
-/api/loyalty-programs/{id}
-/api/orders/create
-/api/orders/{orderId}/add-item
-/api/orders/{orderId}/confirm
-/api/orders/order/{id}
-/api/payment-methods/{id}
-/api/payment-methods
-/api/products/{id}
-/api/products
-/api/profile/create
-/api/profile/update/{id}
-/api/profile/getProfile/{id}
-/api/profile/delete/{id}
+/api/addresses/**  \
+**GET** /api/categories — *Просмотр категорий товаров* \
+**GET** /api/categories/{id} \
+**GET** /api/images \
+**GET** /api/images/{id} \
+**GET** /api/images/by-product/{productId} \
+**GET** /api/loyalty-programs \
+**GET** /api/loyalty-programs/{id} \
+**POST** /api/orders/create \
+**POST** /api/orders/{orderId}/add-item \
+**PUT** /api/orders/{orderId}/confirm \
+**GET** /api/orders/order/{id} \
+**GET** /api/payment-methods/{id} \
+**GET** /api/payment-methods \
+**GET** /api/products/{id} \
+**GET** /api/products \
+**POST** /api/profile/create \
+**PUT** /api/profile/update/{id} \
+**GET** /api/profile/getProfile/{id} \
+**DELETE** /api/profile/delete/{id} \
 
 ### Доступные работникам огганизации
 
-/api/orders/**
-/api/products/update/{id}
-/api/roles/{id}
+/api/orders/** \
+**PUT** /api/products/update/{id} \
+**GET** /api/roles/{id} \
 
 ### Доступные администратору
 
