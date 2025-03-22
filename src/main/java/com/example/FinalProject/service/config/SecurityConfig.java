@@ -86,7 +86,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo
-                    .oidcUserService(userService.oauth2UserService())))
+                    .userService(userService.oauth2UserService())))
             .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         System.out.println("OAuth2 login configured");

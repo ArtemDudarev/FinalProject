@@ -56,9 +56,9 @@ public class User implements UserDetails {
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-//    @NotEmpty(message = "Фамилия не может быть пустой")
+    @NotEmpty(message = "Фамилия не может быть пустой")
     @Size(min = 3, max = 60, message = "Фамилия должна содержать от 6 до 60 символов")
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @NotEmpty(message = "Email не может быть пустым")
@@ -66,9 +66,9 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-//    @NotEmpty(message = "Пароль не может быть пустым")
+    @NotEmpty(message = "Пароль не может быть пустым")
     @Size(min = 6, max = 100, message = "Пароль должен содержать от 6 до 100 символов")
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Pattern(regexp = "^\\+375(29|33|44|25|17)[0-9]{7}$", message = "Некорректный формат телефона")

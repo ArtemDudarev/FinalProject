@@ -15,7 +15,7 @@ import com.example.FinalProject.repository.RoleRepository;
 import com.example.FinalProject.repository.UserLoyaltyProgramRepository;
 import com.example.FinalProject.repository.UserRepository;
 import com.example.FinalProject.service.UserService;
-import com.example.FinalProject.service.config.CustomOidcUser;
+import com.example.FinalProject.service.config.CustomOAuth2User;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
@@ -26,13 +26,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -233,31 +233,31 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public OidcUserService oauth2UserService() {
-        return new OidcUserService(){
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
+        return new DefaultOAuth2UserService() {
             @Override
-            public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-                OidcUser oidcUser = super.loadUser(userRequest);
-                String email = oidcUser.getEmail();
+            public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+                OAuth2User oauth2User = super.loadUser(userRequest);
+                String email = oauth2User.getAttribute("email");
 
-                log.info("Регистрация или авторизация пользователя");
                 User user = userRepository.findByEmail(email).orElse(null);
-//                User user = userRepository.findByEmail(email).isEmpty() ? null : userRepository.findByEmail(email).get();
-                if (user == null){
+                if (user == null) {
                     UserDto userDto = UserDto.builder()
-                        .email(email)
-                        .firstName(oidcUser.getFullName())
-                        .build();
+                                             .email(email)
+                                             .firstName(oauth2User.getAttribute("given_name"))
+                                             .lastName("family_name")
+                                             .password("password")
+                                             .build();
+                    Role role = roleRepository.findByRoleName("ROLE_USER").orElseThrow(() -> new RuntimeException("Role not found: ROLE_USER"));
+                    userDto.setRoleId(role.getRoleId());
                     user = UserMapper.toEntity(userDto, roleRepository, addressRepository);
-                    Role role = roleRepository.findByRoleName("ROLE_USER").get();
-                    user.setRole(role);
                     userRepository.save(user);
                 }
 
                 Set<GrantedAuthority> authorities = new HashSet<>();
                 authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
 
-                return new CustomOidcUser(oidcUser, authorities);
+                return new CustomOAuth2User(oauth2User, authorities);
             }
         };
     }
