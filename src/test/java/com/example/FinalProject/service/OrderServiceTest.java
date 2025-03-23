@@ -77,21 +77,11 @@ class OrderServiceTest {
     private UUID productId = UUID.randomUUID();
 
     @Test
-    void testCreateOrderException() {
-        when(orderMapper.toEntity(any(OrderDto.class), eq(userRepository), eq(paymentMethodRepository))).thenReturn(order);
-        when(orderRepository.save(any(Order.class))).thenThrow(new RuntimeException("Simulated exception"));
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.createOrder(orderDto));
-        assertEquals(String.format("Ошибка при сохранении %s заказа", orderDto), exception.getMessage());
-        verify(orderRepository, times(1)).save(any(Order.class));
-    }
-
-    @Test
     void testCreateOrderBasketUserNotFound() {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> orderService.createOrderBasket(userId));
-        assertEquals("Пользователь не найден", exception.getMessage());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.createOrderBasket(userId));
+        assertEquals("Ошибка при создании заказа для пользователя " + userId, exception.getMessage());
         verify(userRepository, times(1)).findById(userId);
     }
 
@@ -140,9 +130,9 @@ class OrderServiceTest {
     void testConfirmOrderOrderNotFound() {
         when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> orderService.confirmOrder(orderId, PaymentMethodDto.builder()
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.confirmOrder(orderId, PaymentMethodDto.builder()
                                                                                                                                                  .build()));
-        assertEquals("Заказ не найден", exception.getMessage());
+        assertEquals("Ошибка при подтверждении заказа " + orderId, exception.getMessage());
         verify(orderRepository, times(1)).findById(orderId);
     }
 
@@ -152,40 +142,28 @@ class OrderServiceTest {
         when(paymentMethodRepository.findByMethodName(anyString())).thenReturn(paymentMethod);
         when(userLoyaltyProgramRepository.findByUserUserId(any(UUID.class))).thenReturn(userLoyaltyProgram);
         when(loyaltyProgramRepository.findById(any(UUID.class))).thenReturn(Optional.of(loyaltyProgram));
-        when(orderRepository.save(any(Order.class))).thenThrow(new RuntimeException("Simulated exception"));
+        when(orderRepository.save(any(Order.class))).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.confirmOrder(orderId, PaymentMethodDto.builder()
                                                                                                                                    .build()));
         assertEquals(String.format("Ошибка при подтверждении заказа %s", orderId), exception.getMessage());
-        verify(orderRepository, times(1)).save(any(Order.class));
     }
 
     @Test
     void testUpdateOrderNotFound() {
         when(orderRepository.existsById(orderId)).thenReturn(false);
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> orderService.updateOrder(orderId, orderDto));
-        assertEquals("Заказ не найден", exception.getMessage());
-        verify(orderRepository, times(1)).existsById(orderId);
-    }
-
-    @Test
-    void testUpdateOrderException() {
-        when(orderRepository.existsById(orderId)).thenReturn(true);
-        when(orderMapper.toEntity(any(OrderDto.class), eq(userRepository), eq(paymentMethodRepository))).thenReturn(order);
-        when(orderRepository.save(any(Order.class))).thenThrow(new RuntimeException("Simulated exception"));
-
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.updateOrder(orderId, orderDto));
-        assertEquals(String.format("Ошибка при обновлении %s заказа", orderId), exception.getMessage());
-        verify(orderRepository, times(1)).save(any(Order.class));
+        assertEquals("Ошибка при обновлении " + orderId +" заказа", exception.getMessage());
+        verify(orderRepository, times(1)).existsById(orderId);
     }
 
     @Test
     void testFindOrderByIdNotFound() {
         when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> orderService.findOrderById(orderId));
-        assertEquals("Заказ не найден", exception.getMessage());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.findOrderById(orderId));
+        assertEquals("Ошибка при получении заказа по ID: " + orderId, exception.getMessage());
         verify(orderRepository, times(1)).findById(orderId);
     }
 

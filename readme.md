@@ -35,32 +35,32 @@
 
 ### Доступные зарегистрированным пользователям
 
-/api/addresses/**  \
+/api/addresses/** — *Любая crud операция с адресами* \
 **GET** /api/categories — *Просмотр категорий товаров* \
-**GET** /api/categories/{id} \
-**GET** /api/images \
-**GET** /api/images/{id} \
-**GET** /api/images/by-product/{productId} \
-**GET** /api/loyalty-programs \
-**GET** /api/loyalty-programs/{id} \
-**POST** /api/orders/create \
-**POST** /api/orders/{orderId}/add-item \
-**PUT** /api/orders/{orderId}/confirm \
-**GET** /api/orders/order/{id} \
-**GET** /api/payment-methods/{id} \
-**GET** /api/payment-methods \
-**GET** /api/products/{id} \
-**GET** /api/products \
-**POST** /api/profile/create \
-**PUT** /api/profile/update/{id} \
-**GET** /api/profile/getProfile/{id} \
-**DELETE** /api/profile/delete/{id} \
+**GET** /api/categories/{id} — *Получение информации о конкретной категории по ID* \
+**GET** /api/images — *Получение списка всех изображений* \
+**GET** /api/images/{id} — *Получение информации об изображении по ID* \
+**GET** /api/images/by-product/{productId} — *Получение списка изображений продукта по ID продукта* \
+**GET** /api/loyalty-programs — *Получение списка программ лояльности* \
+**GET** /api/loyalty-programs/{id} — *Получение информации о программе лояльности по ID* \
+**POST** /api/orders/create — *Создание нового заказа* \
+**POST** /api/orders/{orderId}/add-item — *Добавление товара в заказ* \
+**PUT** /api/orders/{orderId}/confirm — *Подтверждение заказа* \
+**GET** /api/orders/order/{id} — *Получение информации о заказе по ID* \
+**GET** /api/payment-methods/{id} — *Получение информации о методе оплаты по ID* \
+**GET** /api/payment-methods — *Получение списка методов оплаты* \
+**GET** /api/products/{id} — *Получение информации о продукте по ID* \
+**GET** /api/products — *Получение списка продуктов* \
+**POST** /api/profile/create — *Создание профиля пользователя* \
+**PUT** /api/profile/update/{id} — *Обновление профиля пользователя по ID* \
+**GET** /api/profile/getProfile/{id} — *Получение информации о профиле пользователя по ID* \
+**DELETE** /api/profile/delete/{id} — *Удаление профиля пользователя по ID* \
 
 ### Доступные работникам огганизации
 
-/api/orders/** \
-**PUT** /api/products/update/{id} \
-**GET** /api/roles/{id} \
+/api/orders/** — *любая crud операция с заказами* \
+**PUT** /api/products/update/{id} — *Обновление информации о продукте по ID* \
+**GET** /api/roles/{id} — *Получение информации о роли по ID* \
 
 ### Доступные администратору
 

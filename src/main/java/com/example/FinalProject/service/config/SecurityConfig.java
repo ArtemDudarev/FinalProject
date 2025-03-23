@@ -69,10 +69,10 @@ public class SecurityConfig {
                     "/api/profile/update/{id}",
                     "/api/profile/getProfile/{id}",
                     "/api/profile/delete/{id}",
-                    "/api/profile/get-user-id-by-email/{email}").hasAnyRole("USER", "WORKER")
+                    "/api/profile/get-user-id-by-email/{email}").hasAnyRole("USER", "WORKER", "ADMIN")
                 .requestMatchers("/api/orders/**",
                     "/api/products/update/{id}",
-                    "/api/roles/{id}").hasRole("WORKER")
+                    "/api/roles/{id}").hasAnyRole("WORKER", "ADMIN")
                 .requestMatchers( "/api/addresses/**",
                     "/api/admin/manage-users/**",
                     "/api/categories/**",

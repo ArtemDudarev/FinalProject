@@ -45,7 +45,7 @@ public class LoyaltyProgramServiceTest {
             loyaltyProgramService.createLoyaltyProgram(loyaltyProgramDto);
         });
 
-        assertEquals("Ошибка при создании программы лояльности Test Loyalty Program", exception.getMessage());
+        assertEquals("Ошибка при сохранении Test Loyalty Program программы лояльности", exception.getMessage());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class LoyaltyProgramServiceTest {
             loyaltyProgramService.updateLoyaltyProgram(programId, loyaltyProgramDto);
         });
 
-        assertEquals("Программа лояльности не найдена", exception.getMessage());
+        assertEquals("Ошибка при обновлении Test Loyalty Program программы лояльности", exception.getMessage());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class LoyaltyProgramServiceTest {
             loyaltyProgramService.findLoyaltyProgramDtoById(programId);
         });
 
-        assertEquals("Программа лояльности не найдена", exception.getMessage());
+        assertEquals("Ошибка при получении программы лояльности Dto по ID: " + programId, exception.getMessage());
     }
 
     @Test
@@ -78,16 +78,7 @@ public class LoyaltyProgramServiceTest {
             loyaltyProgramService.findAllDto();
         });
 
-        assertEquals("Ошибка при получении всех программ лояльности", exception.getMessage());
+        assertEquals("Ошибка при получении всех программ лояльности Dto", exception.getMessage());
     }
 
-//    @Test
-//    void testDeleteLoyaltyProgramErrorMessage() {
-//        when(loyaltyProgramRepository.deleteById(programId)).thenThrow(RuntimeException.class);
-//        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-//            loyaltyProgramService.deleteLoyaltyProgram(programId);
-//        });
-//
-//        assertEquals("Программа лояльности не найдена", exception.getMessage());
-//    }
 }
