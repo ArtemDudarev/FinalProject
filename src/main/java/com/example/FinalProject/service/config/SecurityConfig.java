@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -86,8 +87,9 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
             .oauth2Login(oauth2 -> oauth2
                 .userInfoEndpoint(userInfo -> userInfo
-                    .userService(userService.oauth2UserService())))
-            .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
+                    .userService(userService.oauth2UserService()))
+                .defaultSuccessUrl("/api/products", true))
+            .httpBasic(Customizer.withDefaults());
 
         System.out.println("OAuth2 login configured");
         return httpSecurity.build();

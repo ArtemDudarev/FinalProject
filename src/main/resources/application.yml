@@ -24,6 +24,10 @@ spring:
             scope:
               - profile
               - email
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
 
 
 logging:
