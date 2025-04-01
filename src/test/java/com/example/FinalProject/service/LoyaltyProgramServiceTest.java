@@ -38,8 +38,8 @@ public class LoyaltyProgramServiceTest {
     }
 
     @Test
-    void testCreateLoyaltyProgramErrorMessage() {
-        when(loyaltyProgramRepository.save(any(LoyaltyProgram.class))).thenThrow(new RuntimeException("Test exception"));
+    void testCreateLoyaltyProgramException() {
+        when(loyaltyProgramRepository.save(any(LoyaltyProgram.class))).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             loyaltyProgramService.createLoyaltyProgram(loyaltyProgramDto);
@@ -49,7 +49,7 @@ public class LoyaltyProgramServiceTest {
     }
 
     @Test
-    void testUpdateLoyaltyProgramErrorMessage() {
+    void testUpdateLoyaltyProgramException() {
         when(loyaltyProgramRepository.existsById(programId)).thenReturn(false);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -60,7 +60,7 @@ public class LoyaltyProgramServiceTest {
     }
 
     @Test
-    void testFindLoyaltyProgramDtoByIdErrorMessage() {
+    void testFindLoyaltyProgramDtoByIdException() {
         when(loyaltyProgramRepository.findById(programId)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -71,8 +71,8 @@ public class LoyaltyProgramServiceTest {
     }
 
     @Test
-    void testFindAllLoyaltyProgramsErrorMessage() {
-        when(loyaltyProgramRepository.findAll()).thenThrow(new RuntimeException("Test exception"));
+    void testFindAllLoyaltyProgramsException() {
+        when(loyaltyProgramRepository.findAll()).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             loyaltyProgramService.findAllDto();

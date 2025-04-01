@@ -89,7 +89,7 @@ class OrderServiceTest {
     void testCreateOrderBasketException() {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(paymentMethodRepository.findByMethodName("Cash")).thenReturn(paymentMethod);
-        when(orderRepository.save(any(Order.class))).thenThrow(new RuntimeException("Simulated exception"));
+        when(orderRepository.save(any(Order.class))).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.createOrderBasket(userId));
         assertEquals(String.format("Ошибка при создании заказа для пользователя %s", userId), exception.getMessage());
@@ -119,7 +119,7 @@ class OrderServiceTest {
     void testAddOrderItemException() {
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
         when(productRepository.findById(orderItemDto.getProductId())).thenReturn(Optional.of(product));
-        when(orderItemRepository.save(any(OrderItem.class))).thenThrow(new RuntimeException("Simulated exception"));
+        when(orderItemRepository.save(any(OrderItem.class))).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.addOrderItem(orderId, orderItemDto));
         assertEquals(String.format("Ошибка при добавлении элемента заказа в заказ %s", orderId), exception.getMessage());
@@ -169,7 +169,7 @@ class OrderServiceTest {
 
     @Test
     void testFindOrderByIdException() {
-        when(orderRepository.findById(orderId)).thenThrow(new RuntimeException("Simulated exception"));
+        when(orderRepository.findById(orderId)).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.findOrderById(orderId));
         assertEquals(String.format("Ошибка при получении заказа по ID: %s", orderId), exception.getMessage());
@@ -187,7 +187,7 @@ class OrderServiceTest {
 
     @Test
     void testFindOrderDtoByIdException() {
-        when(orderRepository.findById(orderId)).thenThrow(new RuntimeException("Simulated exception"));
+        when(orderRepository.findById(orderId)).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.findOrderDtoById(orderId));
         assertEquals(String.format("Ошибка при получении Dto заказа по ID: %s", orderId), exception.getMessage());
@@ -196,7 +196,7 @@ class OrderServiceTest {
 
     @Test
     void testFindAllOrdersException() {
-        when(orderRepository.findAll()).thenThrow(new RuntimeException("Simulated exception"));
+        when(orderRepository.findAll()).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.findAll());
         assertEquals("Ошибка при получении всех заказов", exception.getMessage());
@@ -205,7 +205,7 @@ class OrderServiceTest {
 
     @Test
     void testFindAllOrderDtosException() {
-        when(orderRepository.findAll()).thenThrow(new RuntimeException("Simulated exception"));
+        when(orderRepository.findAll()).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.findAllDto());
         assertEquals("Ошибка при получении всех Dto заказов", exception.getMessage());
@@ -214,7 +214,7 @@ class OrderServiceTest {
 
     @Test
     void testDeleteOrderException() {
-        doThrow(new RuntimeException("Simulated exception")).when(orderRepository).deleteById(orderId);
+        doThrow(new RuntimeException()).when(orderRepository).deleteById(orderId);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> orderService.deleteOrder(orderId));
         assertEquals(String.format("Ошибка при удалении заказа с ID: %s", orderId), exception.getMessage());

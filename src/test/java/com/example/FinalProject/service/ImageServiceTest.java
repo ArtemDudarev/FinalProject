@@ -44,7 +44,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    void testCreateImageErrorMessage() {
+    void testCreateImageException() {
         when(imageRepository.save(any(Image.class))).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -55,7 +55,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    void testCreateImageForProductErrorMessage() {
+    void testCreateImageForProductException() {
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -66,7 +66,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    void testUpdateImageErrorMessage() {
+    void testUpdateImageException() {
         when(imageRepository.existsById(imageId)).thenReturn(false);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -77,7 +77,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    void testFindImageDtoByIdErrorMessage() {
+    void testFindImageDtoByIdException() {
         when(imageRepository.findById(imageId)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -88,7 +88,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    void testFindAllByProductProductIdErrorMessage() {
+    void testFindAllByProductProductIdException() {
         when(imageRepository.findAllByProductProductId(productId)).thenThrow(new RuntimeException());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
