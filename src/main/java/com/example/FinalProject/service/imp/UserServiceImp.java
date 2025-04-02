@@ -63,6 +63,12 @@ public class UserServiceImp implements UserService {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
             User user = UserMapper.toEntity(userDto, roleRepository, addressRepository);
+
+            userLoyaltyProgramRepository.save(UserLoyaltyProgram.builder()
+                .user(user)
+                .loyaltyProgram(loyaltyProgramRepository.findByProgramName("First user").get())
+                .build());
+
             userRepository.save(user);
             log.info(String.format("Пользователь %s успешно сохранен", userDto.getEmail()));
             return userDto;
@@ -252,6 +258,11 @@ public class UserServiceImp implements UserService {
                     userDto.setRoleId(role.getRoleId());
                     user = UserMapper.toEntity(userDto, roleRepository, addressRepository);
                     userRepository.save(user);
+
+                    userLoyaltyProgramRepository.save(UserLoyaltyProgram.builder()
+                                                                        .user(user)
+                                                                        .loyaltyProgram(loyaltyProgramRepository.findByProgramName("First user").get())
+                                                                        .build());
                 }
 
                 Set<GrantedAuthority> authorities = new HashSet<>();

@@ -1,7 +1,6 @@
 package com.example.FinalProject.service.config;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;

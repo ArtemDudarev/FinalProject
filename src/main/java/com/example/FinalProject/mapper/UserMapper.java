@@ -50,7 +50,7 @@ public class UserMapper {
                       .lastName(user.getLastName())
                       .email(user.getEmail())
                       .phoneNumber(user.getPhoneNumber())
-                      .addressDto(AddressMapper.toDto(user.getAddress()))
+                      .addressDto(AddressMapper.toDto(user.getAddress() != null ? user.getAddress() : new Address()))
                       .build();
     }
 }

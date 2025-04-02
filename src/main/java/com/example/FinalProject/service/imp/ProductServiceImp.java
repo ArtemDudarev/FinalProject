@@ -126,6 +126,7 @@ public class ProductServiceImp implements ProductService {
                                    .sorted((p1, p2) -> {
                                        int result = switch (sortBy) {
                                            case "price" -> Double.compare(p1.getPrice(), p2.getPrice());
+                                           case "weightGrams" -> Integer.compare(p1.getWeightGrams(), p2.getWeightGrams());
                                            case "name" -> p1.getProductName().compareTo(p2.getProductName());
                                            default -> 0;
                                        };
